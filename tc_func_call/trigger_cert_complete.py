@@ -1,26 +1,26 @@
-import json
 import os
-
-from dotenv import load_dotenv
+import json
+import env_loader
 from tencentcloud.common.common_client import CommonClient
 from tencentcloud.common import credential
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 
-load_dotenv()
 
-try:
+def complete_certificate(certificate_id: str):
+    try:
+        cred = credential.Credential(os.getenv("SECRET_ID"), os.getenv("SECRET_KEY"))
 
-    cred = credential.Credential(os.getenv("SECRET_ID"), os.getenv("SECRET_KEY"))
+        http_profile = HttpProfile()
+        http_profile.endpoint = "ssl.tencentcloudapi.com"
 
-    httpProfile = HttpProfile()
-    httpProfile.endpoint = "ssl.tencentcloudapi.com"
-    clientProfile = ClientProfile()
-    clientProfile.httpProfile = httpProfile
+        client_profile = ClientProfile()
+        client_profile.httpProfile = http_profile
 
-    params = "{\"CertificateId\":\"MpXfSroB\"}"
-    common_client = CommonClient("ssl", "2019-12-05", cred, "", profile=clientProfile)
-    print(common_client.call_json("CompleteCertificate", json.loads(params)))
-except TencentCloudSDKException as err:
-    print(err)
+        common_client = CommonClient("ssl", "2019-12-05", cred, "", profile=client_profile)
+        params = json.dumps({"CertificateId": certificate_id})
+
+        return common_client.call_json("CompleteCertificate", json.loads(params))
+    except TencentCloudSDKException as err:
+        return str(err)
