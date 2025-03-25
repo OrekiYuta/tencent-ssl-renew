@@ -24,3 +24,9 @@ def get_certificate_detail(certificate_id: str):
         return common_client.call_json("DescribeCertificateDetail", json.loads(params))
     except TencentCloudSDKException as err:
         return str(err)
+
+
+if __name__ == '__main__':
+    certificate_id = "MwYz6NPX"
+    result = get_certificate_detail(certificate_id)
+    print(json.dumps(result, indent=2, ensure_ascii=False))

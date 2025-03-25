@@ -8,24 +8,18 @@ from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 
 
-def get_certificates(params: dict):
+def get_domain_id(domain: str):
     try:
         cred = credential.Credential(os.getenv("SECRET_ID"), os.getenv("SECRET_KEY"))
 
         httpProfile = HttpProfile()
-        httpProfile.endpoint = "ssl.tencentcloudapi.com"
+        httpProfile.endpoint = "dnspod.tencentcloudapi.com"
         clientProfile = ClientProfile()
         clientProfile.httpProfile = httpProfile
 
-        common_client = CommonClient("ssl", "2019-12-05", cred, "", profile=clientProfile)
-        response = common_client.call_json("DescribeCertificates", params)
-        return response
+        common_client = CommonClient("dnspod", "2021-03-23", cred, "", profile=clientProfile)
+        params = json.dumps({"Domain": domain})
+
+        return common_client.call_json("DescribeDomain", json.loads(params))
     except TencentCloudSDKException as err:
-        return {"error": str(err)}
-
-
-if __name__ == '__main__':
-    params = {}
-    result = get_certificates(params)
-    print(json.dumps(result, indent=2, ensure_ascii=False))
-    
+        return str(err)

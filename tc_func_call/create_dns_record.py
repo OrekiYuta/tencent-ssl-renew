@@ -26,8 +26,14 @@ def create_record_batch(params: dict):
 
 if __name__ == "__main__":
     params = {
-        "DomainIdList": ["abc.gd.cn"],
-        "RecordList": [{"RecordType": "TXT", "Value": "abc", "SubDomain": "A"}]
+        "DomainIdList": ["1234567"],
+        "RecordList": [
+            {
+                "RecordType": "TXT",
+                "Value": "13076cls98k2x06r3k9uos6yn3kdzxyecmwbeozxwy5zxriqcasoui",
+                "SubDomain": "_dnsauth.abc",
+            }
+        ],
     }
     result = create_record_batch(params)
     print(result)
